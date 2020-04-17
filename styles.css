@@ -1,0 +1,62 @@
+@font-face {
+  font-family: "GT America Mono";
+  src: url(./fonts/GT-America-Mono-Light.woff2) format(woff2),
+    url(./fonts/GT-America-Mono-Light.eot) format(eot),
+    url(./fonts/GT-America-Mono-Light.otf) format(otf),
+    url(./fonts/GT-America-Mono-Light.ttf) format(ttf),
+    url(./fonts/GT-America-Mono-Light.woff) format(woff);
+}
+
+@font-face {
+  font-family: "GT America";
+  src: url(fonts/GT-America-Expanded-Black.woff2) format(woff2),
+    url(fonts/GT-America-Expanded-Black.ttf) format(ttf),
+    url(fonts/GT-America-Expanded-Black.woff) format(woff),
+    url(fonts/GT-America-Expanded-Black.otf) format(otf),
+    url(fonts/GT-America-Expanded-Black.eot) format(eot);
+}
+
+html,
+body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.mainTitle {
+  position: absolute;
+  left: 4.46%;
+  right: 69.7%;
+  top: 7.11%;
+  bottom: 88.82%;
+  color: #ffffff;
+  font-style: normal;
+  font-weight: 900;
+  font-size: 40px;
+  font-family: "GT America";
+  /* mix-blend-mode: normal; */
+}
+
+.subtitle {
+  font-family: "GT America Mono";
+  position: absolute;
+  left: 4.46%;
+  top: 12.5%;
+  letter-spacing: -0.035em;
+  color: #ffffff;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: normal;
+  font-weight: 300;
+}
+
+.comingSoon {
+  font-family: "GT America Mono";
+  color: #ffffff;
+  font-size: 22px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 40%;
+}
