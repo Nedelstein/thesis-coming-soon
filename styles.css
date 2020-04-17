@@ -23,20 +23,15 @@ body {
   height: 100%;
 }
 
-.mainTitle {
-  position: absolute;
-  left: 4.46%;
-  right: 69.7%;
-  top: 7.11%;
-  bottom: 88.82%;
-  color: #ffffff;
-  /* font-style: normal;
-  font-weight: 900; */
-  /* font-size: 40px; */
-  font-family: "GT America";
-  width: 25%;
-  /* mix-blend-mode: normal; */
+img{
+  margin-top: 50px;
 }
+
+.container {
+  max-width: 100%;
+  width: 90%;
+}
+
 
 .subtitle {
   font-family: "GT America Mono";
@@ -54,10 +49,36 @@ body {
 .comingSoon {
   font-family: "GT America Mono";
   color: #ffffff;
-  font-size: 22px;
-  position: absolute;
+  font-size: 18px;
+  margin-top:8%;
+  /* position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 40%;
+  width: 40%; */
+}
+
+canvas {
+  position: fixed;
+  top:0;
+  left:0;
+  z-index:-10;
+}
+
+.rsvp {
+  margin-top: 8%;
+  margin-bottom: 30px;
+  font-size: 20px;
+  font-family: "GT America Expanded Black";
+  text-align:center;
+  color: white;
+}
+
+
+a { color:white;
+text-decoration: none;}
+a:hover { color:white; }
+.nav a { color:white; }
+.rsvp:hover {
+  text-decoration: underline;
 }
