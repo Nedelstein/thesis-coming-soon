@@ -105,16 +105,28 @@ void main(void){
     gl_FragColor=vec4(color,1.);
     }
 `;
+
 main();
+
 function main() {
   console.log("Hello, WebGL!");
+  window.addEventListener("resize", resize, false);
 
   //////////////////////////////////////////////
   // create the context
   const canvas = document.querySelector("#glcanvas");
+
+  const gl = canvas.getContext("webgl");
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
-  const gl = canvas.getContext("webgl");
+
+  function resize() {
+    console.log("resize");
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    render();
+  }
 
   // compile vertex shader
   const vertex_shader = gl.createShader(gl.VERTEX_SHADER);
@@ -220,8 +232,12 @@ function main() {
   //////////////////////////////////////////////
   // set up animation loop
   let start_time = Date.now();
+  //   resize();
+
   function render() {
     // activate our program
+    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+
     gl.useProgram(shader_program);
 
     //update uniforms
@@ -231,5 +247,6 @@ function main() {
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
     requestAnimationFrame(render);
   }
+
   requestAnimationFrame(render);
 }
