@@ -30,10 +30,11 @@ body {
   top: 7.11%;
   bottom: 88.82%;
   color: #ffffff;
-  font-style: normal;
-  font-weight: 900;
-  font-size: 40px;
+  /* font-style: normal;
+  font-weight: 900; */
+  /* font-size: 40px; */
   font-family: "GT America";
+  width: 25%;
   /* mix-blend-mode: normal; */
 }
 

@@ -1,4 +1,5 @@
 "use strict";
+
 //////////////////////////////////////////////
 // Vertex shader program
 const VS_SOURCE = `
