@@ -60,7 +60,7 @@ void main(void){
     vec2 F = vec2(randStart[9], -.9);
     vec2 G = vec2(-1.1, randStart[12]);
     vec2 H = vec2(-.2, 1.5);
-    vec2 I = vec2(1.1, randStart[16]);
+    vec2 I = vec2(-1.4, randStart[16]);
     vec2 J = vec2(randStart[17], -.5);
     vec2 K = vec2(.7, randStart[20]);
     vec2 L = vec2(randStart[21], .8);
@@ -211,190 +211,190 @@ uvA.y += sin(uv.x * 7. + u_time) * .1;
 main();
 
 function getRand(min, max) {
-    return Math.random() * (max - min) + min;
+  return Math.random() * (max - min) + min;
 }
 
 function main() {
-    console.log("Hello, WebGL!");
-    window.addEventListener("resize", resize, false);
+  console.log("Hello, WebGL!");
+  window.addEventListener("resize", resize, false);
 
-    //////////////////////////////////////////////
-    // create the context
-    const canvas = document.querySelector("#glcanvas");
+  //////////////////////////////////////////////
+  // create the context
+  const canvas = document.querySelector("#glcanvas");
 
-    const gl = canvas.getContext("webgl");
+  const gl = canvas.getContext("webgl");
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+
+  function resize() {
+    console.log("resize");
+
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
+    render();
+  }
+
+  // compile vertex shader
+  const vertex_shader = gl.createShader(gl.VERTEX_SHADER);
+  gl.shaderSource(vertex_shader, VS_SOURCE);
+  gl.compileShader(vertex_shader);
+
+  // compile fragment shader
+  const fragment_shader = gl.createShader(gl.FRAGMENT_SHADER);
+  gl.shaderSource(fragment_shader, FS_SOURCE);
+  gl.compileShader(fragment_shader);
 
 
-    function resize() {
-        console.log("resize");
+  // link fragment and vertex shader
+  const shader_program = gl.createProgram();
+  gl.attachShader(shader_program, vertex_shader);
+  gl.attachShader(shader_program, fragment_shader);
+  gl.linkProgram(shader_program);
 
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-        render();
+  //////////////////////////////////////////////
+  // query the shaders for attibute and uniform "locations"
+  const vertex_position_location = gl.getAttribLocation(
+    shader_program,
+    "aVertexPosition"
+  );
+  const vertex_color_location = gl.getAttribLocation(
+    shader_program,
+    "aVertexColor"
+  );
+  const vertex_uv_location = gl.getAttribLocation(shader_program, "aVertexUV");
+  const u_time_location = gl.getUniformLocation(shader_program, "u_time");
+
+  // vertex position data
+  const position_buffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, position_buffer);
+  const positions = [
+    1.0,
+    1.0, // right top
+    -1.0,
+    1.0, // left top
+    1.0,
+    -1.0, // right bottom
+    -1.0,
+    -1.0, // left bottom
+  ];
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
+  gl.vertexAttribPointer(vertex_position_location, 2, gl.FLOAT, false, 0, 0);
+  gl.enableVertexAttribArray(vertex_position_location);
+
+  // vertex color data
+  const color_buffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, color_buffer);
+  const colors = [
+    1.0,
+    1.0,
+    1.0,
+    1.0, // white
+    1.0,
+    0.0,
+    0.0,
+    1.0, // red
+    0.0,
+    1.0,
+    0.0,
+    1.0, // green
+    0.0,
+    0.0,
+    1.0,
+    1.0, // blue
+  ];
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW);
+  gl.vertexAttribPointer(vertex_color_location, 4, gl.FLOAT, false, 0, 0);
+  gl.enableVertexAttribArray(vertex_color_location);
+
+  // vertex position data
+  const uv_buffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, uv_buffer);
+  const uvs = [
+    1.0,
+    1.0, // right top
+    -1.0,
+    1.0, // left top
+    1.0,
+    -1.0, // right bottom
+    -1.0,
+    -1.0, // left bottom
+  ];
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(uvs), gl.STATIC_DRAW);
+  gl.vertexAttribPointer(vertex_uv_location, 2, gl.FLOAT, false, 0, 0);
+  gl.enableVertexAttribArray(vertex_uv_location);
+
+  //////////////////////////////////////////////
+  // configure gl
+  gl.enable(gl.DEPTH_TEST);
+  gl.depthFunc(gl.LEQUAL);
+
+  //////////////////////////////////////////////
+  // draw
+
+  // clear the background
+  gl.clearColor(0.0, 0.0, 0.0, 1.0);
+  gl.clearDepth(1.0);
+  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+  //////////////////////////////////////////////
+  // set up animation loop
+  let start_time = Date.now();
+  //   resize();
+
+  //get random shapes of blobs
+  var randomShapes = new Float32Array(13);
+  console.log("random Shape values");
+  for (var i = 0; i < randomShapes.length; i++) {
+    randomShapes[i] = getRand(3, 4);
+    console.log(randomShapes[i]);
+  }
+  console.log("random Size values");
+  var randomSizes = new Float32Array(13);
+  for (var i = 0; i < randomSizes.length; i++) {
+    randomSizes[i] = getRand(.6, .9);
+    console.log(randomSizes[i]);
+  }
+  // var randColIndx = new Float32Array(7);
+  // for (var i = 0; i < randColIndx.length; i++) {
+  //     randColIndx[i] = Math.round(getRand(0, 13));
+  //     console.log(randColIndx[i]);
+  // }
+  console.log("random start values");
+  var randomStart = new Float32Array(23);
+  for (var i = 0; i < randomStart.length; i++) {
+    randomStart[i] = getRand(-1.2, 1.2);
+    // randomStart[i + 1] = getRand(-1, 1);
+    console.log(randomStart[i]);
+  }
+
+
+  function render() {
+    // activate our program
+    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+
+    gl.useProgram(shader_program);
+
+    //update uniforms
+    gl.uniform1f(u_time_location, (Date.now() - start_time) * 0.001);
+
+    //set random shapes for blobs
+    var locationOfFoo = gl.getUniformLocation(shader_program, "randShape");
+    if (locationOfFoo != -1) {
+      gl.uniform1fv(locationOfFoo, randomShapes);
     }
-
-    // compile vertex shader
-    const vertex_shader = gl.createShader(gl.VERTEX_SHADER);
-    gl.shaderSource(vertex_shader, VS_SOURCE);
-    gl.compileShader(vertex_shader);
-
-    // compile fragment shader
-    const fragment_shader = gl.createShader(gl.FRAGMENT_SHADER);
-    gl.shaderSource(fragment_shader, FS_SOURCE);
-    gl.compileShader(fragment_shader);
-
-
-    // link fragment and vertex shader
-    const shader_program = gl.createProgram();
-    gl.attachShader(shader_program, vertex_shader);
-    gl.attachShader(shader_program, fragment_shader);
-    gl.linkProgram(shader_program);
-
-    //////////////////////////////////////////////
-    // query the shaders for attibute and uniform "locations"
-    const vertex_position_location = gl.getAttribLocation(
-        shader_program,
-        "aVertexPosition"
-    );
-    const vertex_color_location = gl.getAttribLocation(
-        shader_program,
-        "aVertexColor"
-    );
-    const vertex_uv_location = gl.getAttribLocation(shader_program, "aVertexUV");
-    const u_time_location = gl.getUniformLocation(shader_program, "u_time");
-
-    // vertex position data
-    const position_buffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, position_buffer);
-    const positions = [
-        1.0,
-        1.0, // right top
-        -1.0,
-        1.0, // left top
-        1.0,
-        -1.0, // right bottom
-        -1.0,
-        -1.0, // left bottom
-    ];
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
-    gl.vertexAttribPointer(vertex_position_location, 2, gl.FLOAT, false, 0, 0);
-    gl.enableVertexAttribArray(vertex_position_location);
-
-    // vertex color data
-    const color_buffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, color_buffer);
-    const colors = [
-        1.0,
-        1.0,
-        1.0,
-        1.0, // white
-        1.0,
-        0.0,
-        0.0,
-        1.0, // red
-        0.0,
-        1.0,
-        0.0,
-        1.0, // green
-        0.0,
-        0.0,
-        1.0,
-        1.0, // blue
-    ];
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW);
-    gl.vertexAttribPointer(vertex_color_location, 4, gl.FLOAT, false, 0, 0);
-    gl.enableVertexAttribArray(vertex_color_location);
-
-    // vertex position data
-    const uv_buffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, uv_buffer);
-    const uvs = [
-        1.0,
-        1.0, // right top
-        -1.0,
-        1.0, // left top
-        1.0,
-        -1.0, // right bottom
-        -1.0,
-        -1.0, // left bottom
-    ];
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(uvs), gl.STATIC_DRAW);
-    gl.vertexAttribPointer(vertex_uv_location, 2, gl.FLOAT, false, 0, 0);
-    gl.enableVertexAttribArray(vertex_uv_location);
-
-    //////////////////////////////////////////////
-    // configure gl
-    gl.enable(gl.DEPTH_TEST);
-    gl.depthFunc(gl.LEQUAL);
-
-    //////////////////////////////////////////////
-    // draw
-
-    // clear the background
-    gl.clearColor(0.0, 0.0, 0.0, 1.0);
-    gl.clearDepth(1.0);
-    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-
-    //////////////////////////////////////////////
-    // set up animation loop
-    let start_time = Date.now();
-    //   resize();
-
-    //get random shapes of blobs
-    var randomShapes = new Float32Array(13);
-    console.log("random Shape values");
-    for (var i = 0; i < randomShapes.length; i++) {
-        randomShapes[i] = getRand(3, 4);
-        console.log(randomShapes[i]);
+    var locationOfSize = gl.getUniformLocation(shader_program, "randSize");
+    if (locationOfSize != -1) {
+      gl.uniform1fv(locationOfSize, randomSizes);
     }
-    console.log("random Size values");
-    var randomSizes = new Float32Array(13);
-    for (var i = 0; i < randomSizes.length; i++) {
-        randomSizes[i] = getRand(.6, .9);
-        console.log(randomSizes[i]);
+    var locationOfStart = gl.getUniformLocation(shader_program, "randStart");
+    if (locationOfStart != -1) {
+      gl.uniform1fv(locationOfStart, randomStart);
     }
-    // var randColIndx = new Float32Array(7);
-    // for (var i = 0; i < randColIndx.length; i++) {
-    //     randColIndx[i] = Math.round(getRand(0, 13));
-    //     console.log(randColIndx[i]);
-    // }
-    console.log("random start values");
-    var randomStart = new Float32Array(23);
-    for (var i = 0; i < randomStart.length; i++) {
-        randomStart[i] = getRand(-1.2, 1.2);
-        // randomStart[i + 1] = getRand(-1, 1);
-        console.log(randomStart[i]);
-    }
-
-
-    function render() {
-        // activate our program
-        gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
-
-        gl.useProgram(shader_program);
-
-        //update uniforms
-        gl.uniform1f(u_time_location, (Date.now() - start_time) * 0.001);
-
-        //set random shapes for blobs
-        var locationOfFoo = gl.getUniformLocation(shader_program, "randShape");
-        if (locationOfFoo != -1) {
-            gl.uniform1fv(locationOfFoo, randomShapes);
-        }
-        var locationOfSize = gl.getUniformLocation(shader_program, "randSize");
-        if (locationOfSize != -1) {
-            gl.uniform1fv(locationOfSize, randomSizes);
-        }
-        var locationOfStart = gl.getUniformLocation(shader_program, "randStart");
-        if (locationOfStart != -1) {
-            gl.uniform1fv(locationOfStart, randomStart);
-        }
-        // draw the geometry
-        gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-        requestAnimationFrame(render);
-    }
-
+    // draw the geometry
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
     requestAnimationFrame(render);
+  }
+
+  requestAnimationFrame(render);
 }
